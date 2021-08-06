@@ -118,33 +118,33 @@ func sudokuValidator(w http.ResponseWriter, req *http.Request) {
 		boardOk = false
 		reason = "Bad board size."
 		w.WriteHeader(http.StatusUnprocessableEntity)
+		return
 	}
 
 	// fmt.Fprintf(w, "Submitted board='%s'\n", board)
 
-	if len(board) == 81 {
-		for i := 0; i < 9; i++ {
-			if !validateCol(board, i) {
-				boardOk = false
-				reason = "Bad column"
-				break
-			}
-			if !validateRow(board, i) {
-				boardOk = false
-				reason = "Bad row"
-				break
-			}
-			if !validateSquare(board, i) {
-				boardOk = false
-				reason = "Bad square"
-				break
-			}
+	for i := 0; i < 9; i++ {
+		if !validateCol(board, i) {
+			boardOk = false
+			reason = "Bad column"
+			break
+		}
+		if !validateRow(board, i) {
+			boardOk = false
+			reason = "Bad row"
+			break
+		}
+		if !validateSquare(board, i) {
+			boardOk = false
+			reason = "Bad square"
+			break
 		}
 	}
 
 	// fmt.Fprintf(w, "BoardOK? %t, Reason='%s'\n", boardOk, reason)
 	if !boardOk {
 		http.Error(w, reason, http.StatusMethodNotAllowed)
+		return
 	}
 }
 
